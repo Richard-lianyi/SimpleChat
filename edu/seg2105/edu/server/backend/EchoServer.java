@@ -3,10 +3,10 @@ package edu.seg2105.edu.server.backend;
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
 
-import edu.seg2105.client.common.ChatIF;
+
+import ocsf.server.*;
 import ocsf.server.*;
 import java.io.IOException;
-
 /**
  * This class overrides some of the methods in the abstract 
  * superclass in order to give more functionality to the server.
@@ -19,11 +19,11 @@ import java.io.IOException;
 public class EchoServer extends AbstractServer 
 {
   //Class variables *************************************************
-  
+  ChatIF serverUI;
   /**
    * The default port to listen on.
    */
-  ChatIF serverUI;
+
   
   //Constructors ****************************************************
   
@@ -35,7 +35,7 @@ public class EchoServer extends AbstractServer
   public EchoServer(int port, ChatIF ui) throws IOException
   {
     super(port);
-	this.serverUI = ui;
+	 this.serverUI = ui;
   }
 
   
@@ -50,8 +50,8 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
-     System.out.println("Message received: <" + msg + "> from " + client.getInfo("loginID"));
-      String message = (String) msg;
+    System.out.println("Message received: " + msg + " from " + client);
+    String message = (String) msg;
 
 	// Check if the message starts with "#login"
 	if (message.startsWith("#login")) {
@@ -64,21 +64,20 @@ public class EchoServer extends AbstractServer
 			try {
 				client.close();
 			} catch (IOException e) {
-            // Handle the exception if needed
+				// Handle the exception if needed
 			}
 		} else {
-        // Set the loginID information in the client
+			// Set the loginID information in the client
 			client.setInfo("loginID", id);
 			System.out.println(id + " has logged on");
-    }
-    // Send a message to all clients indicating that the user has logged on
+		}
+		// Send a message to all clients indicating that the user has logged on
 		this.sendToAllClients(id + " has logged on");
 	} else {
-    // If the message does not start with "#login", send it to all clients
+		// If the message does not start with "#login", send it to all clients
 		this.sendToAllClients(msg);
-	}	
-
-  }
+	}
+	}
     
   /**
    * This method overrides the one in the superclass.  Called
@@ -99,6 +98,11 @@ public class EchoServer extends AbstractServer
     System.out.println
       ("Server has stopped listening for connections.");
   }
+  /**
+   * Hook method called each time a new client connection is
+   * accepted. The default implementation does nothing.
+   * @param client the connection connected to the client.
+   */
   
   
   //Class methods ***************************************************
@@ -110,7 +114,7 @@ public class EchoServer extends AbstractServer
    * @param args[0] The port number to listen on.  Defaults to 5555 
    *          if no argument is entered.
    */
-    /**
+   /**
    * Hook method called each time a new client connection is
    * accepted. The default implementation does nothing.
    * @param client the connection connected to the client.
@@ -145,6 +149,5 @@ public class EchoServer extends AbstractServer
     ConnectionToClient client, Throwable exception) {
 	  System.out.println("A Client lost the connection to the server.");
   }
-  
 }
 //End of EchoServer class
