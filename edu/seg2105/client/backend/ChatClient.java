@@ -27,6 +27,7 @@ public class ChatClient extends AbstractClient
    * the display method in the client.
    */
   ChatIF clientUI; 
+  String loginID;
 
   
   //Constructors ****************************************************
@@ -43,8 +44,16 @@ public class ChatClient extends AbstractClient
     throws IOException 
   {
     super(host, port); //Call the superclass constructor
-    this.clientUI = clientUI;
-    openConnection();
+    if(loginID.equals("")) {
+		System.out.println("Error: No loginID!"+ " Connection aborted.");
+		System.exit(0);
+	}
+    else {
+    	this.loginID = loginID;
+        this.clientUI = clientUI;
+        openConnection();
+        sendToServer("#loginID <"+ loginID +">");
+    }  
   }
 
   
