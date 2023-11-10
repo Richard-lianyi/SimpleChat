@@ -49,11 +49,17 @@ public class ServerConsole implements ChatIF{
 	        	server.close();
 	        	System.exit(0);
 	        }
+			else if(message.equals("#close")) {
+	        	server.close();
+	        }
 	        else if(message.equals("#stop")) {
 	        	server.stopListening();
 	        }
-	        else if(message.equals("#close")) {
-	        	server.close();
+	        else if(message.equals("#start")) {
+	        	server.listen();
+	        }    
+	        else if(message.equals("#getport")) {
+	        	server.getPort();
 	        }
 	        else if(message.startsWith("#setport")) {
 	        	int port = Integer.parseInt(message.substring("#setport".length())); 
@@ -64,13 +70,6 @@ public class ServerConsole implements ChatIF{
 	        		System.out.println("Can not set port when listening");
 	        	}
 	        }
-	        else if(message.equals("#start")) {
-	        	server.listen();
-	        }    
-	        else if(message.equals("#getport")) {
-	        	server.getPort();
-	        }
-	        
 	        else {
 	        	display(message);
 	        	server.sendToAllClients("<SERVER MSG> "+ message);
